@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ClipLoader } from "react-spinners";
 
 const PatientProfile = () => {
   const [patientData, setPatientData] = useState(null);
@@ -46,7 +47,11 @@ const PatientProfile = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return(
+      <div className="flex items-center justify-center min-h-screen">
+        <ClipLoader color="#fd961a" size={50} />
+      </div>
+    );
   }
 
   if (error) {

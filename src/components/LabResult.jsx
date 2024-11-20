@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BsDownload } from "react-icons/bs";
+import { ClipLoader } from "react-spinners";
 
 const LabResult = () => {
   const [labResults, setLabResults] = useState([]);
@@ -9,32 +10,36 @@ const LabResult = () => {
   useEffect(() => {
     const fetchLabResults = async () => {
       try {
-        const username = 'coalition';
-        const password = 'skills-test';
+        const username = "coalition";
+        const password = "skills-test";
         const base64Credentials = btoa(`${username}:${password}`);
 
-        const response = await fetch('https://fedskillstest.coalitiontechnologies.workers.dev', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Basic ${base64Credentials}`,
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await fetch(
+          "https://fedskillstest.coalitiontechnologies.workers.dev",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Basic ${base64Credentials}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch lab results');
+          throw new Error("Failed to fetch lab results");
         }
 
         const data = await response.json();
-        console.log('Fetched lab results:', data);
+        console.log("Fetched lab results:", data);
 
-       
-        const patient = data.find(patient => patient.name === "Jessica Taylor");
+        const patient = data.find(
+          (patient) => patient.name === "Jessica Taylor"
+        );
 
         if (patient) {
-          setLabResults(patient.lab_results || []);  
+          setLabResults(patient.lab_results || []);
         } else {
-          setError('Patient not found');
+          setError("Patient not found");
         }
       } catch (err) {
         setError(err.message);
@@ -47,7 +52,11 @@ const LabResult = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ClipLoader color="#fd961a" size={50} />
+      </div>
+    );
   }
 
   if (error) {
@@ -62,7 +71,10 @@ const LabResult = () => {
         <ul>
           {labResults.length > 0 ? (
             labResults.map((result, index) => (
-              <li key={index} className="flex justify-between items-center py-3">
+              <li
+                key={index}
+                className="flex justify-between items-center py-3"
+              >
                 <div className="flex items-center space-x-4">
                   <div>
                     <span className="font-medium text-[#072635]">{result}</span>
@@ -72,7 +84,9 @@ const LabResult = () => {
               </li>
             ))
           ) : (
-            <li className="py-3 text-sm text-gray-500">No lab results available for Jessica Taylor</li>
+            <li className="py-3 text-sm text-gray-500">
+              No lab results available for Jessica Taylor
+            </li>
           )}
         </ul>
       </div>
